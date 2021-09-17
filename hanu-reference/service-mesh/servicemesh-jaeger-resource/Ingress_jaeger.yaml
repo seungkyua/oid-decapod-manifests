@@ -7,7 +7,6 @@ metadata:
   namespace: istio-system
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
     - host: dashboard-ahnsk.taco-cat.xyz
@@ -20,3 +19,7 @@ spec:
                 number: 16686
           path: /jaeger
           pathType: ImplementationSpecific
+  tls:
+    - hosts:
+      - dashboard-ahnsk.taco-cat.xyz
+      secretName: taco-cat-tls
