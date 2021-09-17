@@ -1,3 +1,4 @@
+---
 # Source: servicemesh-jaeger-resource/templates/jaeger-controlplane.yaml
 apiVersion: jaegertracing.io/v1
 kind: Jaeger

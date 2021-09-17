@@ -1,3 +1,4 @@
+---
 # Source: servicemesh-kiali-resource/templates/kiali-controlplane.yaml
 apiVersion: kiali.io/v1alpha1
 kind: Kiali
