@@ -10,13 +10,13 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   rules:
-    - host: kiali.k2-node01
+    - host: dashboard-ahnsk.taco-cat.xyz
       http:
         paths:
         - backend:
             service:
-              name: kaili
+              name: kiali
               port:
                 number: 20001
-          path: /
-          pathType: Prefix
+          path: /kiali
+          pathType: ImplementationSpecific
