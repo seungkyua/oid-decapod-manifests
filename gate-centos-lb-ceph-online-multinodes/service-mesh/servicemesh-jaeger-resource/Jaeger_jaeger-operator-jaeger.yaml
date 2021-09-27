@@ -33,9 +33,8 @@ spec:
         tls.ca: /etc/ssl/certs/tls.crt
         server-urls: https://eck-elasticsearch-es-http.lma.svc:9200
   query:
-    extraEnv:
-    - name: QUERY_BASE_PATH
-      value: /jaeger
+    options:
+      query.base-path: /jaeger
   volumeMounts:
   - mountPath: /etc/ssl/certs
     name: es-tls
