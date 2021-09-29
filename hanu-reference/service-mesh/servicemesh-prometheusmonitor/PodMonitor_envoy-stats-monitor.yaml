@@ -4,7 +4,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
   name: envoy-stats-monitor
-  namespace: lma
+  namespace: istio-system
   labels:
     monitoring: istio-proxies
 spec:
