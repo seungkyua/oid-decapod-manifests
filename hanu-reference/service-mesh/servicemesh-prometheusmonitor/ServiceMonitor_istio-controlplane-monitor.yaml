@@ -3,7 +3,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: istio-controlplane-monitor
-  namespace: istio-system
+  namespace: lma
   labels:
     monitoring: istio-controlplane
 spec:

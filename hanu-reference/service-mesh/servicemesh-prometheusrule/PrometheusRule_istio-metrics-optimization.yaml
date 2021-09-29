@@ -3,7 +3,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: PrometheusRule
 metadata:
   name: istio-metrics-optimization
-  namespace: istio-system
+  namespace: lma
   labels:
     app.kubernetes.io/name: istio-prometheus
     name: prometheus
