@@ -5,13 +5,14 @@ metadata:
   name: grafana
   namespace: lma
   labels:
-    helm.sh/chart: grafana-5.5.7
+    helm.sh/chart: grafana-6.19.4
     app.kubernetes.io/name: grafana
     app.kubernetes.io/instance: grafana
-    app.kubernetes.io/version: "7.1.1"
+    app.kubernetes.io/version: "8.3.3"
     app.kubernetes.io/managed-by: Helm
 spec:
   replicas: 1
+  revisionHistoryLimit: 10
   selector:
     matchLabels:
       app.kubernetes.io/name: grafana
@@ -24,13 +25,14 @@ spec:
         app.kubernetes.io/name: grafana
         app.kubernetes.io/instance: grafana
       annotations:
-        checksum/config: d812cba8ecfa7a608d0caf5ed4b7d0c27fde973bbc8942d07de60b863953e679
+        checksum/config: 76c6aee9266c7eeefd9498a92621a675b3e67ceeb41b41a0995018fd0bb2afd9
         checksum/dashboards-json-config: 01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b
-        checksum/sc-dashboard-provider-config: a8cfeaac3c5b855d1bfc99bfca03586fb98abbc546d73c797c9ee625353bf678
-        checksum/secret: 297f1d17fb2e1e94c134f78e25772d6e3d56ffce96104a7d14d348cc7720d7ef
+        checksum/sc-dashboard-provider-config: b2cf1fccb7c64cd22288bc7ae25d04412ab76191629c761b53f8bf054aa120da
+        checksum/secret: c7d85f62147e21abce0b8b955781ae8cf151368749b4cbe072a86417869f05e6
     spec:
       
       serviceAccountName: grafana
+      automountServiceAccountToken: true
       securityContext:
         fsGroup: 472
         runAsGroup: 472
@@ -40,6 +42,7 @@ spec:
           image: "busybox:1.31.1"
           imagePullPolicy: IfNotPresent
           securityContext:
+            runAsNonRoot: false
             runAsUser: 0
           command: ["chown", "-R", "472:472", "/var/lib/grafana"]
           resources:
@@ -47,30 +50,14 @@ spec:
           volumeMounts:
             - name: storage
               mountPath: "/var/lib/grafana"
-        - name: grafana-sc-datasources
-          image: "kiwigrid/k8s-sidecar:0.1.151"
-          imagePullPolicy: IfNotPresent
-          env:
-            - name: METHOD
-              value: LIST
-            - name: LABEL
-              value: "grafana_datasource"
-            - name: FOLDER
-              value: "/etc/grafana/provisioning/datasources"
-            - name: RESOURCE
-              value: "both"
-          resources:
-            {}
-          volumeMounts:
-            - name: sc-datasources-volume
-              mountPath: "/etc/grafana/provisioning/datasources"
+      enableServiceLinks: true
       containers:
         - name: grafana-sc-dashboard
-          image: "kiwigrid/k8s-sidecar:0.1.151"
+          image: "quay.io/kiwigrid/k8s-sidecar:1.14.2"
           imagePullPolicy: IfNotPresent
           env:
             - name: METHOD
-              value: 
+              value: WATCH
             - name: LABEL
               value: "grafana_dashboard"
             - name: FOLDER
@@ -84,8 +71,39 @@ spec:
           volumeMounts:
             - name: sc-dashboard-volume
               mountPath: "/tmp/dashboards"
+        - name: grafana-sc-datasources
+          image: "quay.io/kiwigrid/k8s-sidecar:1.14.2"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: METHOD
+              value: WATCH
+            - name: LABEL
+              value: "grafana_datasource"
+            - name: FOLDER
+              value: "/etc/grafana/provisioning/datasources"
+            - name: RESOURCE
+              value: "both"
+            - name: REQ_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: grafana
+                  key: admin-user
+            - name: REQ_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: grafana
+                  key: admin-password
+            - name: REQ_URL
+              value: http://localhost:3000/api/admin/provisioning/datasources/reload
+            - name: REQ_METHOD
+              value: POST
+          resources:
+            {}
+          volumeMounts:
+            - name: sc-datasources-volume
+              mountPath: "/etc/grafana/provisioning/datasources"
         - name: grafana
-          image: "grafana/grafana:7.1.1"
+          image: "grafana/grafana:8.3.3"
           imagePullPolicy: IfNotPresent
           volumeMounts:
             - name: config
@@ -124,6 +142,15 @@ spec:
                 configMapKeyRef:
                   name: grafana
                   key: plugins
+            
+            - name: GF_PATHS_DATA
+              value: /var/lib/grafana/
+            - name: GF_PATHS_LOGS
+              value: /var/log/grafana
+            - name: GF_PATHS_PLUGINS
+              value: /var/lib/grafana/plugins
+            - name: GF_PATHS_PROVISIONING
+              value: /etc/grafana/provisioning
           livenessProbe:
             failureThreshold: 10
             httpGet:

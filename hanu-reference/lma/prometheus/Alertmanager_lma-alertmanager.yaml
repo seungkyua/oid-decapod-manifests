@@ -7,12 +7,16 @@ metadata:
   labels:
     app: kube-prometheus-stack-alertmanager
     
-    chart: kube-prometheus-stack-14.5.0
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/instance: prometheus
+    app.kubernetes.io/version: "21.0.3"
+    app.kubernetes.io/part-of: kube-prometheus-stack
+    chart: kube-prometheus-stack-21.0.3
     release: "prometheus"
     heritage: "Helm"
 spec:
-  image: quay.io/prometheus/alertmanager:v0.21.0
-  version: v0.21.0
+  image: quay.io/prometheus/alertmanager:v0.23.0
+  version: v0.23.0
   replicas: 1
   listenLocal: false
   serviceAccountName: lma-alertmanager
@@ -34,4 +38,3 @@ spec:
     runAsGroup: 2000
     runAsNonRoot: true
     runAsUser: 1000
-  portName: web

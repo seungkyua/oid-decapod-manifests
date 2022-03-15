@@ -7,6 +7,7 @@ metadata:
   labels:
     
     app.kubernetes.io/name: jaeger-operator
+    app.kubernetes.io/instance: jaeger-operator
 spec:
   ports:
   - name: metrics

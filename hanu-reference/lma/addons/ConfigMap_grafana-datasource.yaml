@@ -1,5 +1,5 @@
 ---
-# Source: lma-addons/templates/grafana-dashboard/configmaps-datasources.yaml
+# Source: lma-addons/templates/grafana-dashboard/configmap-datasources.yaml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -14,6 +14,10 @@ data:
     datasources:
     - name: Prometheus
       type: prometheus
-      url: http://thanos-query:9090/
+      url: http://thanos-query.lma:9090
       access: proxy
       isDefault: true
+    - name: Loki
+      type: loki
+      url: http://loki.lma:3100
+      access: proxy

@@ -7,39 +7,31 @@ metadata:
   labels:
     
     app.kubernetes.io/name: jaeger-operator
+    app.kubernetes.io/instance: jaeger-operator
 spec:
   replicas: 1
   selector:
     matchLabels:
       
       app.kubernetes.io/name: jaeger-operator
+      app.kubernetes.io/instance: jaeger-operator
   template:
     metadata:
       name: jaeger-operator
       labels:
         
         app.kubernetes.io/name: jaeger-operator
+        app.kubernetes.io/instance: jaeger-operator
     spec:
       serviceAccountName: jaeger-operator
       containers:
         - name: jaeger-operator
-          image: "jaegertracing/jaeger-operator:1.21.2"
+          image: "jaegertracing/jaeger-operator:1.24.0"
           imagePullPolicy: IfNotPresent
           ports:
           - containerPort: 8383
             name: metrics
-          args:
-          - "start"
-          - "--jaeger-agent-image"
-          - "jaegertracing/jaeger-agent:1.21.0"
-          - "--jaeger-collector-image"
-          - "jaegertracing/jaeger-collector:1.21.0"
-          - "--jaeger-ingester-image"
-          - "jaegertracing/jaeger-ingester:1.21.0"
-          - "--jaeger-query-image"
-          - "jaegertracing/jaeger-query:1.21.0"
-          - "--jaeger-all-in-one-image"
-          - "jaegertracing/all-in-one:1.21.0"
+          args: ["start"]
           env:
             - name: WATCH_NAMESPACE
               value: ""

@@ -35,7 +35,7 @@ spec:
         server-urls: https://eck-elasticsearch-es-http.lma.svc:9200
   query:
     options:
-      query.base-path: /jaeger
+      query.base-path: /
   volumeMounts:
   - mountPath: /etc/ssl/certs
     name: es-tls

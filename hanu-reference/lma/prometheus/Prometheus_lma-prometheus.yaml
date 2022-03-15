@@ -7,7 +7,11 @@ metadata:
   labels:
     app: kube-prometheus-stack-prometheus
     
-    chart: kube-prometheus-stack-14.5.0
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/instance: prometheus
+    app.kubernetes.io/version: "21.0.3"
+    app.kubernetes.io/part-of: kube-prometheus-stack
+    chart: kube-prometheus-stack-21.0.3
     release: "prometheus"
     heritage: "Helm"
 spec:
@@ -18,8 +22,8 @@ spec:
         port: web
         pathPrefix: "/"
         apiVersion: v2
-  image: quay.io/prometheus/prometheus:v2.24.0
-  version: v2.24.0
+  image: "quay.io/prometheus/prometheus:v2.31.1"
+  version: v2.31.1
   externalLabels:
     taco_cluster: dev
   externalUrl: http://lma-prometheus.lma:9090
