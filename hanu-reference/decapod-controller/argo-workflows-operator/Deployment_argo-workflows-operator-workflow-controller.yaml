@@ -62,7 +62,7 @@ spec:
                   apiVersion: v1
                   fieldPath: metadata.name
           resources:
-            request:
+            requests:
               cpu: 500m
               memory: 1024Mi
           ports:

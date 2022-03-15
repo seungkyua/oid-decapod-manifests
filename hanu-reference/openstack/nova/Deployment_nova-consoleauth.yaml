@@ -31,7 +31,7 @@ spec:
       annotations:
         "openstackhelm.openstack.org/release_uuid": ""
         configmap-bin-hash: "645b0d7e28e8bdfbf61d768043382ec1b8d1ef241e239fdb7f2d4989a84e1727"
-        configmap-etc-hash: "abd0fd3e1f1b0003b95f2f5187abcc58b6eba0f8bbe3c2d5cab7a9dc3b62c5a5"
+        configmap-etc-hash: "03bd67ff560e934029f33884723feecf4248bc2e9ae9b88ac6a010a07080e4cb"
     spec:
       serviceAccountName: nova-consoleauth
       securityContext:
